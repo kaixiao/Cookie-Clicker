@@ -20,9 +20,9 @@ import numpy as np
 # starting_cookies = 5000
 
 M = 100000
-Xs = [100, 10]
-Ys = [800, 80]
-As = [1.1, 1.2]
+Xs = [10.0, 100.0]
+Ys = [80.0, 800.0]
+As = [1.1, 4.0/3.0]
 starting_cookies = 0
 
 
@@ -45,27 +45,27 @@ def update_square(DP, DP_path, index, leftover_cookies):
 	min_path = -1
 
 	for i in xrange(len(index)):
-		if index == (7, 0):
-			print "Wahooooo!"
-			print index
-			print i
-			print index[i]
-			print leftover_cookies
-			print rate
+		# if index == (7, 0):
+		# 	print "Wahooooo!"
+		# 	print index
+		# 	print i
+		# 	print index[i]
+		# 	print leftover_cookies
+		# 	print rate
 		if index[i] != index_maxs[i]:
 			new_index = np.copy(index)
 			new_index[i] += 1
 			new_index = tuple(new_index)
-			print new_index
+			# print new_index
 			total_time = max((Ys[i]*As[i]**index[i]-leftover_cookies)/rate, 0) + DP[new_index]
-			if index == (7, 0):
-				print i
-				print total_time
+			# if index == (7, 0):
+			# 	print i
+			# 	print total_time
 			if total_time < min_time:
-				if index == (7, 0):
-					print 'made it'
-					print i
-					print total_time
+				# if index == (7, 0):
+				# 	print 'made it'
+				# 	print i
+				# 	print total_time
 				min_time = total_time
 				min_path = i
 
