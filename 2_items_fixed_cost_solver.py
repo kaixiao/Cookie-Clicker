@@ -4,9 +4,9 @@ import math
 
 # M is fixed.
 
-M = 3000
+M = 60000
 Xs = [10, 100]
-Ys = [72.0, 700.0]
+Ys = [72, 700]
 
 minM = max(4, 2 * Ys[0]/Xs[0] * (Ys[0]+Ys[1]) / ( (Ys[0]/Xs[0])-(Ys[1]/Xs[1]) )  )
 
@@ -41,9 +41,25 @@ for i in xrange(max_num):
 		rate += Xs[1]
 		n2 += 1
 	time += M/rate
-	answers[i] = (time, (n1, n2))
+	answers[i] = [time, n1, n2]
 
+import numpy as np
+import pylab as p
+arr = np.array(answers)
+for i in xrange(len(arr)):
+	if i > 0 and i+1 < len(arr):
+		if (arr[i][0] < arr[i-1][0]) and (arr[i][0] < arr[i+1][0]):
+			print "%s is a local minimum" % (arr[i][:])
+			print "it is less than %s and %s" % (arr[i-1][:], arr[i+1][0])
+
+p.plot(arr[10:,1], arr[10:, 0])
+p.xlabel("Number of item 1 purchased")
+p.ylabel("Time of optimal solution")
+p.title("Number of item 1 purchased vs. time of optimal solution")
 boundary_rate = ( Ys[1]-Ys[0] ) / ( (Ys[0]/Xs[0]) - (Ys[1]/Xs[1]) )
+print "T is equal to %s" % (boundary_rate)
+
 boundary_num_items = (boundary_rate - 1)/Xs[0]
 print boundary_num_items
-print sorted(answers)
+print sorted(answers)[:15]
+p.show()

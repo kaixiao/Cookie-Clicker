@@ -4,89 +4,121 @@ import random
 import numpy as np
 
 
+
 M = 60000
 Xs = [10, 100, 300]
 Ys = [72.0, 700.0, 2050.0]
 As = [1, 1, 1]
 starting_cookies = 0
+# OPT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+# OPT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+# OPT = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+# OPT = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
 OPT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 
 MAX_REPEATS = 10000
 MAX_TRIM_REPEATS = 10
 
 
-NUM_OPERATIONS = 5
-NUM_ITEMS = 3
+NUM_OPERATIONS = 6
+NUM_ITEMS = len(Xs)
 
 def random_local_optimize(solution):
 	op = random.randint(1, NUM_OPERATIONS)
 	# print "Chose operation %s" % (op)
 	if op == 1:
-		# Add to beginning/end
-		begin_end = random.randint(0, 1)
+		# Add to some index
+		index = random.randint(0, len(solution))
 		item = random.randint(0, NUM_ITEMS-1)
-		if begin_end:
-			# Try to add to beginning
-			if should_add_to_beginning(solution, item):
-				solution.insert(0, item)
-		else:
-			# Try to add to end
-			if should_add_to_end(solution, item):
-				solution.append(item)
+		if should_add_to_index(solution, item, index):
+			solution.insert(index, item)
 	elif op == 2:
-		# Delete from beginning/end
-		begin_end = random.randint(0, 1)
-		if begin_end:
-			# Try to delete from beginning
-			if should_delete_from_beginning(solution):
-				solution.pop(0)
-		else:
-			# Try to delete from end
-			if should_delete_from_end(solution):
-				solution.pop()
+		# Delete from some index
+		index = random.randint(0, len(solution)-1)
+		if should_delete_from_index(solution, index):
+			solution.pop(index)
 	elif op == 3:
-		# Swap i and i+1
-		i = random.randint(1, len(solution) - 1) - 1
-		if should_swap_consecutive(solution, i):
-			temp = solution[i+1]
-			solution[i+1] = solution[i]
-			solution[i] = temp
+		# Move i to j. If j = i+1, equivalent to swap-consecutive.
+		i = random.randint(0, len(solution) - 1)
+		j = random.randint(0, len(solution) - 1)
+		if should_move(solution, i, j):
+			val = solution.pop(i)
+			solution.insert(j, val)
 	elif op == 4:
 		# Replace value in i
 		i = random.randint(1, len(solution)) - 1
 		new_item = random.randint(0, NUM_ITEMS-1)
 		if should_replace(solution, i, new_item):
 			solution[i] = new_item
+	elif op == 5:
+		# Swap i and j
+		i = random.randint(0, len(solution) - 1)
+		j = random.randint(0, len(solution) - 1)
+		if should_swap(solution, i, j):
+			temp = solution[i]
+			solution[i] = solution[j]
+			solution[j] = temp
 	else:
 		# print 'trying to sort'
 		if should_sort(solution):
-			# print 'sorted!'
-			solution.sort()
-			# solution = sorted(solution)
-	# return solution
+			# print 'should sort! But not actually sorting'
+			pass
+			# solution.sort()
+
+# Returns False if any swaps can improve, True if no swaps can improve
+def no_swaps_can_improve(solution):
+	for i in xrange(len(solution)):
+		for j in xrange(len(solution)):
+			if should_swap(solution, i, j):
+				print 'should swap %s, %s' % (i, j)
+				return False
+	return True
+
+# Returns False if any swaps can improve, True if no swaps can improve
+def no_consecutive_swaps_can_improve(solution):
+	for i in xrange(len(solution)):
+		if should_swap_consecutive(solution, i):
+			print 'should swap consecutive %s, %s' % (i, i+1)
+			return False
+	return True
+
+
 
 
 # Tells you if you are at a local opt.
 def local_optimize_exhaustive(solution):
 
-	# Delete from beginning/end
-	if should_delete_from_beginning(solution) or should_delete_from_end(solution):
-		return False
-	# For each index, test if can do swap_consecutive
-	for i in xrange(len(solution)-1):
-		if should_swap_consecutive(solution, i):
+	# Delete index
+	for del_index in xrange(len(solution)):
+		if should_delete_from_index(solution, del_index):
+			print 'should del %s' % (del_index)
 			return False
+
+	# For each pair of indices, test if can do move
+	for i in xrange(len(solution)):
+		for j in xrange(len(solution)):
+			if should_move(solution, i, j):
+				print 'should swap %s, %s' % (i, j)
+				return False
+
+	# Test sorting
 	if should_sort(solution):
+		print 'should sort!'
 		return False
 
 	for item in xrange(NUM_ITEMS):
-		# Add to beginning/end
-		if should_add_to_beginning(solution, item) or should_add_to_end(solution, item):
-			return False
+		# Add to index
+		for add_index in xrange(len(solution) + 1):
+			if should_add_to_index(solution, item, add_index):
+				print 'should add %s' % (add_index)
+				return False
+		
 		# For each index, try to replace value at index
 		for i in xrange(len(solution)):
 			if should_replace(solution, i, item):
+				print 'should replace %s' % (i)
 				return False
+	
 	return True
 
 
@@ -211,10 +243,15 @@ def bad_init():
 	return solution
 
 def main():
+
+	# while True:
+
+
+
 	# Random initialization
-	# initial_solution = random_init()
-	initial_solution = bad_init()
-	print 'Initial bad solution:\n%s' % initial_solution
+	initial_solution = random_init()
+	# initial_solution = bad_init()
+	# print 'Initial bad solution:\n%s' % initial_solution
 	iters = 0
 	counter = 0
 	solution = initial_solution
@@ -247,15 +284,20 @@ def main():
 		old_solution = solution[:]
 		random_local_optimize(solution)
 
-	print 'random local optimizations got here ', solution
-	if solution == OPT:
-		print 'OPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-	else:
-		print 'Not OPT'
-	print 'speed of solution', compute_value(solution)
-	print 'are we at a local max: %s' % local_optimize_exhaustive(solution)
+	# print 'random local optimizations got here ', solution
+	# if solution == OPT:
+	# 	print 'OPT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+	# else:
+	# 	print 'Not OPT'
+	# print 'speed of solution', compute_value(solution)
+	# print 'are we at a local max: %s' % local_optimize_exhaustive(solution)
 	if sorted(solution) != solution:
 		print 'OMG WE GOT A NOT SORTED SOLUTION!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-	return solution
+		print 'random local optimizations got here ', solution
+		print 'speed of solution', compute_value(solution)
+		if no_swaps_can_improve(solution):
+			print "OMG AND NO SWAPS CAN IMPROVE IT!"
+			# break
+	print solution
 
 sol = main()
