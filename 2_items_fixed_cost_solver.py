@@ -2,8 +2,7 @@ from __future__ import division
 import math
 
 
-# M is fixed.
-
+# Example problem
 M = 60000
 Xs = [10, 100]
 Ys = [72, 700]

@@ -2,13 +2,12 @@ from __future__ import division
 import math
 
 
-# M is fixed.
-
-M = 1000000
-Xs = [100, 10]
-Ys = [800, 80]
-As = [1.4, 2]
-starting_cookies = 1000
+# Example Problem
+M = 100000
+Xs = [10, 90]
+Ys = [80, 800]
+As = [1.2, 1.1]
+starting_cookies = 0
 
 
 
@@ -56,8 +55,6 @@ gen2 = 0
 time_needed = 0
 path = []
 
-
-
 G = 1
 x1 = 0
 x2 = 0
@@ -82,7 +79,7 @@ while should_buy(M, current_cookies, Ys[0]*(As[0]**gen1), G, Xs[0]) or \
 		y2 = Ys[0]*(As[0]**gen1)
 		A = As[0]
 		buy_first_item = (efficient_choice(current_cookies, x1, x2, y1, y2, A, G) == 1)
-	#Uncomment next 4 to do conventional efficiency
+	# Uncomment next 4 to do conventional efficiency
 	# if efficiency(Xs[0], Ys[0]*(As[0]**gen1), G) > efficiency(Xs[1], Ys[1]*(As[1]**gen2), G):
 	# 	buy_first_item = True
 	# else:

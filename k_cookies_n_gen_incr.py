@@ -13,27 +13,12 @@ import numpy as np
 
 
 
-# M = 10000
-# Xs = [10, 250.11, 4.37]
-# Ys = [80, 800.85, 41]
-# As = [1.1, 1.15, 1.12]
-# starting_cookies = 5000
-
+# Example problem:
 M = 100000
-Xs = [10.0, 100.0]
-Ys = [80.0, 800.0]
-As = [1.1, 4.0/3.0]
+Xs = [10, 90]
+Ys = [80, 800]
+As = [1.2, 1.1]
 starting_cookies = 0
-
-
-
-
-
-
-# M = 100000
-# Xs = [1, 10]
-# Ys = [10, 80]
-# As = [1.13, 1.1]
 
 
 def update_square(DP, DP_path, index, leftover_cookies):
@@ -41,31 +26,15 @@ def update_square(DP, DP_path, index, leftover_cookies):
 
 	index_maxs = DP.shape-np.array(1)
 	min_time = (M-leftover_cookies)/rate
-	# DP_path[] = -1 means buy nothing
 	min_path = -1
 
 	for i in xrange(len(index)):
-		# if index == (7, 0):
-		# 	print "Wahooooo!"
-		# 	print index
-		# 	print i
-		# 	print index[i]
-		# 	print leftover_cookies
-		# 	print rate
 		if index[i] != index_maxs[i]:
 			new_index = np.copy(index)
 			new_index[i] += 1
 			new_index = tuple(new_index)
-			# print new_index
 			total_time = max((Ys[i]*As[i]**index[i]-leftover_cookies)/rate, 0) + DP[new_index]
-			# if index == (7, 0):
-			# 	print i
-			# 	print total_time
 			if total_time < min_time:
-				# if index == (7, 0):
-				# 	print 'made it'
-				# 	print i
-				# 	print total_time
 				min_time = total_time
 				min_path = i
 
@@ -128,13 +97,6 @@ for index in indices:
 	else:
 		efficiency_grid[index] = 1
 
-# print rates_grid
-print efficiency_grid
-
-
-
-
-
 path = []
 path_efficiencies = []
 normalized_path_efficiencies = []
@@ -154,23 +116,18 @@ while DP_path[gens_tuple] != -1:
 	generators[DP_path[gens_tuple]] += 1
 	gens_tuple = tuple(generators)
 
-print path
-print normalized_path_efficiencies
 
 eff_decisions_counter = 0
 
 for i in xrange(len(path)):
 	if (path[i] == efficient_choices[i]):
 		eff_decisions_counter += 1
-		# print 'TRUE'
 	else:
 		print i
 		pass
-		# print 'FALSE'
-	# print path[i]
-	# print path_efficiencies[i]
 
+print path
+print normalized_path_efficiencies
 print eff_decisions_counter/len(path)
-
 print DP[0][0]
 
